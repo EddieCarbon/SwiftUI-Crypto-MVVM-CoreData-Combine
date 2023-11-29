@@ -18,7 +18,7 @@ class MarketDataService {
     }
     
     func getCoins() {
-        guard let url = URL(string: "https://api.coingecko.com/api/v3/global") else { return }
+        guard let url = URL(string: "https://api.coingecko.com/api/v3/global&x_cg_demo_api_key=CG-amzxNrUcbr1L7qVFkSYUThKr") else { return }
 
         marketDataSubscription = NetworkingManager.download(url: url)
             .decode(type: GlobalData.self, decoder: JSONDecoder())

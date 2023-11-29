@@ -22,8 +22,8 @@ struct HomeView: View {
             Color.theme.background
                 .ignoresSafeArea()
                 .sheet(isPresented: $showPortfolioView, content: {
-//                    PortfolioView()
-//                        .environmentObject(vm)
+                    PortfolioView()
+                        .environmentObject(vm)
                 })
             
             // content layer
@@ -80,6 +80,11 @@ extension HomeView {
         HStack {
             CircleButtonView(iconName: showPortfolio ? "plus" : "info")
                 .animation(.none)
+                .onTapGesture {
+                    if showPortfolio {
+                        showPortfolioView.toggle()
+                    }
+                }
                 .onTapGesture {
                     if showPortfolio {
                         showPortfolioView.toggle()
