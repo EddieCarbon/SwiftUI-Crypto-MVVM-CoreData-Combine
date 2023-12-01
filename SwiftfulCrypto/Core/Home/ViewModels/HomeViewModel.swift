@@ -19,7 +19,7 @@ class HomeViewModel: ObservableObject {
 
     private let coinDataService = CoinDataService()
     private let marketDataService = MarketDataService()
-//    private let portfolioDataService = PortfolioDataService()
+    private let portfolioDataService = PortfolioDataService()
     private var cancellables = Set<AnyCancellable>()
     
     enum SortOption {
@@ -31,6 +31,7 @@ class HomeViewModel: ObservableObject {
     }
     
     func addSubscribers() {
+        
         // updates allCoins
         $searchText
             .combineLatest(coinDataService.$allCoins, $sortOption)
@@ -48,12 +49,27 @@ class HomeViewModel: ObservableObject {
                 self?.statistic = returnedStats
             }
             .store(in: &cancellables)
+        
+        // updates portfolioCoins
+        $allCoins
+            .combineLatest(portfolioDataService.$savedEntities)
+            .map { coinModels, portfolioEntities -> [CoinModel] in
+                coinModels
+                    .compactMap { coin -> CoinModel? in
+                        guard let entity = portfolioEntities.first(where: { $0.coinID == coin.id}) else {
+                            return nil
+                        }
+                        return coin.updateHoldings(amount: entity.amount)
+                    }
+            }
+            .sink { [weak self] returnedCoins in
+                self?.portfolioCoins = returnedCoins
+            }
+            .store(in: &cancellables)
     }
     
-    private func filterAndSortCoins(text: String, coins: [CoinModel], sort: SortOption) -> [CoinModel] {
-        var updatedCoins = filterCoins(text: text, coins: coins)
-        sortCoins(sort: sort, coins: &updatedCoins)
-        return updatedCoins
+    func updatePortfolio(coin: CoinModel, amount: Double) {
+        portfolioDataService.updatePortfolio(coin: coin, amount: amount)
     }
     
     private func filterCoins(text: String, coins: [CoinModel]) -> [CoinModel] {
@@ -68,6 +84,12 @@ class HomeViewModel: ObservableObject {
                     coin.symbol.lowercased().contains(lowercasedText) ||
                     coin.id.lowercased().contains(lowercasedText)
         }
+    }
+    
+    private func filterAndSortCoins(text: String, coins: [CoinModel], sort: SortOption) -> [CoinModel] {
+        var updatedCoins = filterCoins(text: text, coins: coins)
+        sortCoins(sort: sort, coins: &updatedCoins)
+        return updatedCoins
     }
     
     private func sortCoins(sort: SortOption, coins: inout [CoinModel]) {
