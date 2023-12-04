@@ -138,7 +138,7 @@ extension PortfolioView {
                 Text("Save".uppercased())
             })
             .opacity(
-                (selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText)) ? 1.0 : 0.0
+                (selectedCoin != nil && selectedCoin?.currentHoldings != Double(vm.changeDecimalChar(quantityText))) ? 1.0 : 0.0
             )
         }
         .font(.headline)
@@ -147,7 +147,7 @@ extension PortfolioView {
     private func saveButtonPressed() {
         guard 
             let coin = selectedCoin,
-            let amount = Double(quantityText)
+            let amount = Double(vm.changeDecimalChar(quantityText))
         else { return }
         
         // save to portfolio
@@ -169,6 +169,7 @@ extension PortfolioView {
             }
         }
     }
+    
     
     private func removeSelectedCoin() {
         selectedCoin = nil
