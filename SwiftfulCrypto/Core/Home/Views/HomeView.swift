@@ -198,7 +198,7 @@ extension HomeView {
             
             Button(action: {
                 withAnimation(.linear(duration: 2.0)) {
-//                    vm.reloadData()
+                    vm.reloadData()
                 }
             }, label: {
                 Image(systemName: "goforward")
