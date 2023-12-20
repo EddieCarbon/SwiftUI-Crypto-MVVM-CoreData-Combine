@@ -23,7 +23,7 @@ struct SwiftfulCryptoApp: App {
     var body: some Scene {
         WindowGroup {
             ZStack {
-                NavigationView {
+                NavigationStack {
                     HomeView()
                         .navigationBarHidden(true)
                 }

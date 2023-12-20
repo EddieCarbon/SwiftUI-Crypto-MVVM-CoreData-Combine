@@ -55,12 +55,12 @@ struct HomeView: View {
                 //SettingsView()
             })
         }
-//        .background(
-//            NavigationLink(
-//                destination: DetailLoadingView(coin: $selectedCoin),
-//                isActive: $showDetailView,
-//                label: { EmptyView() })
-//        )
+        .background(
+            NavigationLink(
+                destination: DetailLoadingView(coin: $selectedCoin),
+                isActive: $showDetailView,
+                label: { EmptyView() })
+        )
     }
 }
 
