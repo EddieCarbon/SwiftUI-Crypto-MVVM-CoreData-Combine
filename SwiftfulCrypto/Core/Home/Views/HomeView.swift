@@ -79,7 +79,7 @@ extension HomeView {
     private var homeHeader: some View {
         HStack {
             CircleButtonView(iconName: showPortfolio ? "plus" : "info")
-                .animation(.none)
+                .animation(nil, value: UUID())
                 .onTapGesture {
                     if showPortfolio {
                         showPortfolioView.toggle()
